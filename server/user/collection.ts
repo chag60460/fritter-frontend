@@ -20,8 +20,11 @@ class UserCollection {
    */
   static async addOne(username: string, password: string): Promise<HydratedDocument<User>> {
     const dateJoined = new Date();
-
-    const user = new UserModel({username, password, dateJoined});
+    const points = 0;
+    const limit = 24;
+    const dateLoggedIn = new Date();
+    const pendingRequests = [] as String[];
+    const user = new UserModel({username, password, dateJoined, points, limit, dateLoggedIn, pendingRequests});
     await user.save(); // Saves user to MongoDB
     return user;
   }
@@ -79,6 +82,58 @@ class UserCollection {
 
     await user.save();
     return user;
+  }
+
+  /**
+     * Find a user's points
+     *
+     * @param {string} userId - The userId of the user to update
+     * @return {Promise<Number> } - The number of points a user has
+     */
+   static async findPoints(userId: Types.ObjectId | string): Promise<Number> {
+    let user = await UserModel.findOne({_id: userId})
+    return user.points
+   }
+
+  /**
+     * Increase a user's point
+     *
+     * @param {string} userId - The userId of the user to update
+     * @return {Promise<HydratedDocument<User>> | Promise<null> } - The user with updated point
+     */
+   static async changePoints(userId: Types.ObjectId | string, points: number = 10): Promise<HydratedDocument<User>> {
+    let user = await UserModel.findOne({_id: userId})
+    user.points += points;
+    await user.save();
+    return user
+  }
+
+  /**
+     * Change a user's time limit
+     *
+     * @param {string} userId - The userId of the user to update
+     * @param {number} limit - the new time limit of the user
+     * @return {Promise<HydratedDocument<User>> | Promise<null> } - The user with updated time limit
+     */
+   static async changeLimit(userId: Types.ObjectId | string, limit: number): Promise<HydratedDocument<User>> {
+    let user = await UserModel.findOne({_id: userId})
+    user.limit = limit;
+    await user.save();
+    return user
+  }
+
+  /**
+     * Find a user's time limit
+     *
+     * @param {string} userId - The userId of the user to update
+     * @return {Promise<Number>| Promise<null> } - The user with updated time limit
+     */
+   static async findLimit(userId: Types.ObjectId | string): Promise<Number> {
+    const user = await UserModel.findOne({_id: userId});
+    const current_hour = new Date().getHours();
+    const session_hour = user.dateLoggedIn.getHours();
+    const countdown = Math.max(user.limit - (current_hour - session_hour), 0);
+    return countdown
   }
 
   /**

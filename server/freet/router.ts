@@ -35,6 +35,7 @@ router.get(
     }
 
     const allFreets = await FreetCollection.findAll();
+    console.log(allFreets);
     const response = allFreets.map(util.constructFreetResponse);
     res.status(200).json(response);
   },

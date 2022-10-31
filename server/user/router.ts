@@ -146,6 +146,100 @@ router.patch(
 );
 
 /**
+ * Update a user's points.
+ *
+ * @name PUT /api/users/points
+ *
+ * @param {string} operation - The user's point operation to be added or subtracted
+ * @return {UserResponse} - The updated user
+ * @throws {403} - If user is not logged in
+ * @throws {405} - If user does not have any point
+ */
+ router.put(
+  '/points',
+  [
+    userValidator.isUserLoggedIn,
+  ],
+  async (req: Request, res: Response) => {
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+    if (req.body.operation == "add"){
+      const user = await UserCollection.changePoints(userId, 10);
+      res.status(200).json({
+        message: 'Your points was added successfully.',
+        user: util.constructUserResponse(user)
+      });
+    }
+    else if (req.body.operation == "deduct"){
+      const points = await UserCollection.findPoints(userId);
+      if (points > 0){
+        const user = await UserCollection.changePoints(userId, -1);
+        res.status(200).json({
+          message: 'Your points was added successfully.',
+          user: util.constructUserResponse(user)
+        });
+      }
+      else{
+        res.status(403).json({
+          error: 'You do not have enough points'
+        });
+      }
+    }
+  }
+);
+
+/**
+ * Change a user's time limit
+ * @name PUT /api/users/limit
+ * 
+ * @param {number} limit - the new limit the user sets
+ * @return {UserResponse} - The updated user
+ * @throws {403} - If user is not logged in
+ */
+router.put(
+  '/limit',
+  [
+    userValidator.isUserLoggedIn,
+  ],
+  async (req: Request, res: Response) => {
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+    const newLimit = req.body.limit;
+    const user = await UserCollection.changeLimit(userId, newLimit);
+    res.status(200).json({
+      message: 'Your time limit was updated successfully.',
+      user: util.constructUserResponse(user)
+    });
+  }
+)
+
+/**
+ * Change a user's time limit
+ * @name GET /api/users/limit
+ * 
+ * @return {UserResponse} - The updated user
+ * @throws {403} - If user is not logged in
+ */
+ router.get(
+  '/countdown',
+  [
+    userValidator.isUserLoggedIn,
+  ],
+  async (req: Request, res: Response) => {
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+    const limit = await UserCollection.findLimit(userId);
+    if (limit > 0){
+      const formated_str = `Your time left on Fritter is ${limit} hours`;
+      res.status(200).json({
+        message: formated_str,
+      });
+    }
+    else {
+      req.session.userId = undefined;
+    }
+    
+  }
+)
+
+/**
  * Delete a user.
  *
  * @name DELETE /api/users
