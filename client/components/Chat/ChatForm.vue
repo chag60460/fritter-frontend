@@ -1,56 +1,37 @@
 <!-- Reusable component representing a form in a block style -->
 <!-- This is just an example; feel free to define any reusable components you want! -->
-
 <template>
-  <form @submit.prevent="submit">
-    <h3>{{ title }}</h3>
-    <article
-      v-if="fields.length"
-    >
-      <div
-        v-for="field in fields"
-        :key="field.id"
-      >
-        <label :for="field.id">{{ field.label }}:</label>
-        <textarea
-          v-if="field.id === 'content'"
-          :name="field.id"
-          :value="field.value"
-          @input="field.value = $event.target.value"
-        />
-        <input
-          v-else
-          :type="field.id === 'password' ? 'password' : 'text'"
-          :name="field.id"
-          :value="field.value"
-          @input="field.value = $event.target.value"
+  <main>
+    <form @submit.prevent="submit">
+      <h3>{{ title }}</h3>
+          <input v-model="friend" placeholder="type in friend's username">
+          <span>Message to Friend: </span>
+          <textarea v-model="message" placeholder="type in your message"></textarea>
+    
+      <button type="submit" @click="show_message"> {{ title }} </button>
+
+      <section class="alerts">
+        <article
+          v-for="(status, alert, index) in alerts"
+          :key="index"
+          :class="status"
         >
-      </div>
-    </article>
-    <article v-else>
-      <p>{{ content }}</p>
-    </article>
-    <button
-      type="submit"
-    >
-      {{ title }}
-    </button>
-    <section class="alerts">
-      <article
-        v-for="(status, alert, index) in alerts"
-        :key="index"
-        :class="status"
-      >
-        <p>{{ alert }}</p>
-      </article>
-    </section>
-  </form>
+          <p>{{ alert }}</p>
+        </article>
+      </section>
+    </form>
+    
+    <div v-for="message in message_array">
+      <b> {{$store.state.username}}</b> {{message}}
+    </div>
+
+  </main>
 </template>
 
 <script>
 
 export default {
-  name: 'BlockForm',
+  name: 'ChatForm',
   data() {
     /**
      * Options for submitting this form.
@@ -62,6 +43,9 @@ export default {
       setUsername: false, // Whether or not stored username should be updated after form submission
       refreshFreets: false, // Whether or not stored freets should be updated after form submission
       alerts: {}, // Displays success/error messages encountered during form submission
+      friend: '',
+      message: '',
+      message_array: [],
       callback: null // Function to run after successful form submission
     };
   },
@@ -75,14 +59,12 @@ export default {
         headers: {'Content-Type': 'application/json'},
         credentials: 'same-origin' // Sends express-session credentials with request
       };
+
       if (this.hasBody) {
-        options.body = JSON.stringify(Object.fromEntries(
-          this.fields.map(field => {
-            const {id, value} = field;
-            field.value = '';
-            return [id, value];
-          })
-        ));
+        let payload = {};
+        payload.user = this.friend;
+        payload.message = this.message;
+        options.body = JSON.stringify(payload);
       }
 
       try {
@@ -105,12 +87,16 @@ export default {
         }
 
         if (this.callback) {
-          this.callback(response_message);
+          await this.callback(response_message);
         }
       } catch (e) {
         this.$set(this.alerts, e, 'error');
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
+    },
+
+    show_message() {
+      this.message_array.push(this.message);
     }
   }
 };

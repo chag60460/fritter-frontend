@@ -12,6 +12,7 @@ const store = new Vuex.Store({
     filter: null, // Username to filter shown freets by (null = show all)
     freets: [], // All freets created in the app
     username: null, // Username of the logged in user
+    points: 0,
     alerts: {} // global success/error messages encountered during submissions to non-visible forms
   },
   mutations: {
@@ -30,6 +31,13 @@ const store = new Vuex.Store({
        * @param username - new username to set
        */
       state.username = username;
+    },
+    updatePoints(state, points) {
+      /**
+       * Update the user's points
+       * @param points - user's points ;-;
+       */
+      state.points = points;
     },
     updateFilter(state, filter) {
       /**

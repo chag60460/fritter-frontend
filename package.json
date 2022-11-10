@@ -23,6 +23,9 @@
         "morgan": "~1.10.0",
         "nanoid": "^3.3.4",
         "vue": "^2.7.13",
+        "vue-advanced-chat": "^2.0.4",
+        "vue-beautiful-chat": "^2.5.0",
+        "vue-multiselect": "^2.1.6",
         "vue-router": "^3.6.5",
         "vuex": "^3.6.2",
         "vuex-persistedstate": "^4.1.0"
@@ -54,7 +57,9 @@
                 "files": [
                     "**/*.ts"
                 ],
-                "excludedFiles": ["client/**"],
+                "excludedFiles": [
+                    "client/**"
+                ],
                 "extends": [
                     "xo",
                     "xo-typescript/space",

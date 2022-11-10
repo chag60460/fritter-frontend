@@ -20,6 +20,13 @@
     
     <section>
       <header>
+        <h2>Get Time Remaining on Fritter for @{{ $store.state.username }}</h2>
+      </header>
+      <GetCountDown />
+    </section>
+    
+    <section>
+      <header>
         <h2>Account management</h2>
       </header>
       <LogoutForm />
@@ -34,6 +41,7 @@ import ChangePasswordForm from '@/components/Account/ChangePasswordForm.vue';
 import DeleteAccountForm from '@/components/Account/DeleteAccountForm.vue';
 import LogoutForm from '@/components/Account/LogoutForm.vue';
 import SetTimeLimit from '@/components/Account/SetTimeLimit.vue';
+import GetCountDown from '@/components/Account/GetCountDown.vue';
 
 export default {
   name: 'AccountPage',
@@ -42,7 +50,8 @@ export default {
     ChangePasswordForm,
     DeleteAccountForm,
     LogoutForm,
-    SetTimeLimit
+    SetTimeLimit,
+    GetCountDown
   }
 };
 </script>

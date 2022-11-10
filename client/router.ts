@@ -4,6 +4,8 @@ import FreetsPage from './components/Freet/FreetsPage.vue';
 import AccountPage from './components/Account/AccountPage.vue';
 import LoginPage from './components/Login/LoginPage.vue';
 import NotFound from './NotFound.vue';
+import ChatPage from './components/Chat/ChatPage.vue';
+import ContactsPage from './components/Friends/ContactsPage.vue'
 
 Vue.use(VueRouter);
 
@@ -11,6 +13,8 @@ const routes = [
   {path: '/', name: 'Home', component: FreetsPage},
   {path: '/account', name: 'Account', component: AccountPage},
   {path: '/login', name: 'Login', component: LoginPage},
+  {path: '/chat', name: 'Chat', component: ChatPage},
+  {path: '/contacts', name: 'Contacts', component: ContactsPage},
   {path: '*', name: 'Not Found', component: NotFound}
 ];
 

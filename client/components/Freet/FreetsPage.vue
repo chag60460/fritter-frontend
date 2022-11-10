@@ -21,6 +21,21 @@
         </h3>
       </article>
     </section>
+    
+    <section>
+      <header>
+        <h2>Take the Survey</h2>
+      </header>
+      <takeSurveyForm />
+    </section>
+
+    <section>
+      <header>
+        <h2>Update the Survey</h2>
+      </header>
+      <updateSurveyForm />
+    </section>
+
     <section>
       <header>
         <div class="left">
@@ -38,6 +53,7 @@
             placeholder="🔍 Filter by author (optional)"
             button="🔄 Get freets"
           />
+          <h2>Current Points: {{$store.state.points}}</h2>
         </div>
       </header>
       <section
@@ -62,10 +78,12 @@
 import FreetComponent from '@/components/Freet/FreetComponent.vue';
 import CreateFreetForm from '@/components/Freet/CreateFreetForm.vue';
 import GetFreetsForm from '@/components/Freet/GetFreetsForm.vue';
+import takeSurveyForm from '@/components/Freet/takeSurveyForm.vue';
+import updateSurveyForm from '@/components/Freet/updateSurveyForm.vue';
 
 export default {
   name: 'FreetPage',
-  components: {FreetComponent, GetFreetsForm, CreateFreetForm},
+  components: {FreetComponent, GetFreetsForm, CreateFreetForm, takeSurveyForm, updateSurveyForm},
   mounted() {
     this.$refs.getFreetsForm.submit();
   }

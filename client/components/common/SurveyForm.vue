@@ -1,40 +1,35 @@
 <!-- Reusable component representing a form in a block style -->
 <!-- This is just an example; feel free to define any reusable components you want! -->
-
 <template>
-  <form @submit.prevent="submit">
+  <form @submit.prevent="submit"> <!--@submit = "method_name", @ tells it to look in vue methods -->
     <h3>{{ title }}</h3>
-    <article
-      v-if="fields.length"
-    >
-      <div
-        v-for="field in fields"
-        :key="field.id"
-      >
-        <label :for="field.id">{{ field.label }}:</label>
-        <textarea
-          v-if="field.id === 'content'"
-          :name="field.id"
-          :value="field.value"
-          @input="field.value = $event.target.value"
-        />
-        <input
-          v-else
-          :type="field.id === 'password' ? 'password' : 'text'"
-          :name="field.id"
-          :value="field.value"
-          @input="field.value = $event.target.value"
-        >
-      </div>
-    </article>
-    <article v-else>
-      <p>{{ content }}</p>
-    </article>
-    <button
-      type="submit"
-    >
-      {{ title }}
-    </button>
+    
+    
+    <div>
+      <label :for="topics.id">{{ topics.label }}:</label>
+      
+      <!--Topics-->
+      <multiselect v-model="value" :options="options" :multiple="true" :close-on-select="false" :clear-on-select="false" :preserve-search="true" placeholder="Pick some" label="name" track-by="name" :preselect-first="true">
+        <template slot="selection" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template>
+      </multiselect>
+        
+      <!--Different Opinion -->
+      <h4>Would you like to see differing perspective?</h4>
+      <input type="radio" id="different1" value="true" v-model="picked" />
+      <label for="different1">true</label>
+
+      <input type="radio" id="different2" value="false" v-model="picked" />
+      <label for="different2">false</label>
+
+      <button type="submit">{{ title }}</button>
+    </div>
+
+    
+    <div>
+
+    </div>
+    
+    <!--Alerts, from starter code-->
     <section class="alerts">
       <article
         v-for="(status, alert, index) in alerts"
@@ -44,13 +39,16 @@
         <p>{{ alert }}</p>
       </article>
     </section>
+
   </form>
 </template>
 
 <script>
+import Multiselect from 'vue-multiselect' //import
 
 export default {
-  name: 'BlockForm',
+  name: 'SurveyForm',
+  components: { Multiselect },
   data() {
     /**
      * Options for submitting this form.
@@ -59,10 +57,10 @@ export default {
       url: '', // Url to submit form to
       method: 'GET', // Form request method
       hasBody: false, // Whether or not form request has a body
-      setUsername: false, // Whether or not stored username should be updated after form submission
-      refreshFreets: false, // Whether or not stored freets should be updated after form submission
       alerts: {}, // Displays success/error messages encountered during form submission
-      callback: null // Function to run after successful form submission
+      callback: null, // Function to run after successful form submission
+      options: [],
+      value: []
     };
   },
   methods: {
@@ -75,19 +73,21 @@ export default {
         headers: {'Content-Type': 'application/json'},
         credentials: 'same-origin' // Sends express-session credentials with request
       };
+
+      const payload = [];
+
+      for (let i = 0; i < this.value.length; i++){
+        payload.push(this.value[i]["name"]);
+      }
+
+      payload.push(this.picked);
+
       if (this.hasBody) {
-        options.body = JSON.stringify(Object.fromEntries(
-          this.fields.map(field => {
-            const {id, value} = field;
-            field.value = '';
-            return [id, value];
-          })
-        ));
+        options.body = JSON.stringify(payload); //Request body sent to the back end
       }
 
       try {
         const r = await fetch(this.url, options);
-        const response_message = await r.json();
         if (!r.ok) {
           // If response is not okay, we throw an error and enter the catch block
           const res = await r.json();
@@ -105,7 +105,7 @@ export default {
         }
 
         if (this.callback) {
-          this.callback(response_message);
+          this.callback();
         }
       } catch (e) {
         this.$set(this.alerts, e, 'error');
@@ -116,6 +116,7 @@ export default {
 };
 </script>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style scoped>
 form {
   border: 1px solid #111;
