@@ -27,6 +27,7 @@
         v-else
         to="/login"
       >
+      <img src="../../public/account_icon.png">
         Login
       </router-link>
       <router-link to="/chat">
