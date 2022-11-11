@@ -1,5 +1,6 @@
 <template>
     <main>
+        <link href='https://fonts.googleapis.com/css?family=Goudy Bookletter 1911' rel='stylesheet'>
         <sendFriendRequestForm />
         <putFriendRequestForm />
         <deleteFriendForm />
@@ -18,3 +19,11 @@
         components: {sendFriendRequestForm, ChatBar, putFriendRequestForm, deleteFriendForm},
     };
 </script>
+
+<style scoped>
+main {
+    background-color: #5CB4B4;
+    font-family: 'Goudy Bookletter 1911';
+}
+
+</style>

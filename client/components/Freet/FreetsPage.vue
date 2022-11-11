@@ -2,6 +2,7 @@
 
 <template>
   <main>
+    <link href='https://fonts.googleapis.com/css?family=Goudy Bookletter 1911' rel='stylesheet'>
     <section v-if="$store.state.username">
       <header>
         <h2>Welcome @{{ $store.state.username }}</h2>
@@ -91,6 +92,10 @@ export default {
 </script>
 
 <style scoped>
+main {
+  background-color: #5CB4B4;
+  font-family: 'Goudy Bookletter 1911';
+}
 section {
   display: flex;
   flex-direction: column;

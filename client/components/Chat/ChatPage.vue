@@ -1,5 +1,6 @@
 <template>
     <main>
+        <link href='https://fonts.googleapis.com/css?family=Goudy Bookletter 1911' rel='stylesheet'>
         <sendMessageForm />
         <ChatBar />
     </main>
@@ -20,4 +21,10 @@
   border: 1px solid gray ;
   margin: 1px;
 }
+
+main {
+    background-color: #5CB4B4;
+    font-family: 'Goudy Bookletter 1911';
+}
+
 </style>

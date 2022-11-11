@@ -3,6 +3,7 @@
 
 <template>
   <main>
+    <link href='https://fonts.googleapis.com/css?family=Goudy Bookletter 1911' rel='stylesheet'>
     <section>
       <header>
         <h2>Account settings for @{{ $store.state.username }}</h2>
@@ -55,3 +56,11 @@ export default {
   }
 };
 </script>
+
+<style>
+main {
+    background-color: #5CB4B4;
+    font-family: 'Goudy Bookletter 1911';
+}
+
+</style>

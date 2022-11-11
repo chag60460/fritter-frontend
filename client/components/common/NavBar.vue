@@ -4,20 +4,23 @@
 
 <template>
   <nav>
+    <link href='https://fonts.googleapis.com/css?family=Goudy Bookletter 1911' rel='stylesheet'>
     <div class="left">
-      <img src="../../public/logo.svg">
+      <img src="../../public/fish_icon.png">
       <h1 class="title">
         Fritter
       </h1>
     </div>
     <div class="right">
       <router-link to="/">
+        <img src="../../public/home_icon.png">
         Home
       </router-link>
       <router-link
         v-if="$store.state.username"
         to="/account"
       >
+      <img src="../../public/account_icon.png">
         Account
       </router-link>
       <router-link
@@ -27,6 +30,7 @@
         Login
       </router-link>
       <router-link to="/chat">
+        <img src="../../public/chat_icon.png">
         Chat
       </router-link>
 
@@ -46,11 +50,12 @@
 <style scoped>
 nav {
     padding: 1vw 2vw;
-    background-color: #ccc;
+    background-color: #FFFFFF;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
+    font-family: 'Goudy Bookletter 1911';font-size: 22px;
 }
 
 .title {

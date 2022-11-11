@@ -22,7 +22,7 @@
     </form>
     
     <div v-for="message in message_array">
-      <b> {{$store.state.username}}</b> {{message}}
+      <b> {{$store.state.username}}: </b> {{message}}
     </div>
 
   </main>
